@@ -1,0 +1,62 @@
+<!-- Catatan: Ini hanya contoh sederhana untuk edukasi. Penyalahgunaan fitur spam OTP bisa melanggar hukum dan kebijakan layanan. Gunakan dengan bijak! -->
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kirim Pesan Langsung ke Nomor</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        label, input, button { display: block; margin: 10px 0; }
+        #hasilPesan { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h2>Kirim Pesan Template ke Nomor WhatsApp</h2>
+    <form id="pesanForm">
+        <label for="nomor">Nomor Tujuan (format 628xxxxxxxxxx):</label>
+        <input type="text" id="nomor" name="nomor" placeholder="Masukkan nomor tujuan" required pattern="628[0-9]{8,12}">
+        <label for="nama">Nama Pengguna:</label>
+        <input type="text" id="nama" name="nama" placeholder="Masukkan nama pengguna" required>
+        <button type="submit">Kirim Pesan</button>
+    </form>
+    <div id="status"></div>
+    <div id="hasilPesan"></div>
+    <script>
+        document.getElementById('pesanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const nomorTujuan = document.getElementById('nomor').value.trim();
+            const namaPengguna = document.getElementById('nama').value.trim();
+            const statusDiv = document.getElementById('status');
+            const hasilDiv = document.getElementById('hasilPesan');
+            hasilDiv.innerHTML = "";
+            statusDiv.innerText = "";
+
+            // Validasi nomor tujuan
+            if (!/^628[0-9]{8,12}$/.test(nomorTujuan)) {
+                statusDiv.innerText = "Nomor tujuan harus dimulai dengan 628 dan terdiri dari 11-15 digit.";
+                return;
+            }
+            if (namaPengguna.length === 0) {
+                statusDiv.innerText = "Nama pengguna tidak boleh kosong.";
+                return;
+            }
+
+            statusDiv.innerText = "Membuka WhatsApp untuk mengirim pesan...";
+
+            // Template pesan
+            const pesan = `Hai ${namaPengguna},%0A` +
+                `Terima kasih telah mendaftar di Bimbel Pintar.%0A` +
+                `Untuk menyelesaikan proses pendaftaran, silakan klik link di bawah ini untuk memverifikasi email Anda:%0A%0A` +
+                `👉 Verifikasi Email Saya %0A` +
+                `Klik link ini https://muel90.github.io/web_projekan/index.html`;
+
+            // Membuka WhatsApp Web dengan pesan langsung ke nomor tujuan
+            const url = `https://wa.me/${nomorTujuan}?text=${pesan}`;
+            window.open(url, '_blank');
+
+            hasilDiv.innerHTML = `<p>Jika WhatsApp tidak terbuka otomatis, <a href="${url}" target="_blank">klik di sini untuk mengirim pesan</a>.</p>`;
+        });
+    </script>
+</body>
+</html>
